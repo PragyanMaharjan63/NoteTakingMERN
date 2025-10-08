@@ -1,0 +1,21 @@
+import express from "express";
+import cors from "cors";
+import { configDotenv } from "dotenv";
+import connectDB from "./config/connectdb.js";
+import authRouter from "./routes/authRouter.js";
+
+configDotenv();
+const PORT = process.env.PORT;
+const app = express();
+app.use(cors({ credentials: true }));
+app.use(express.json());
+connectDB();
+
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
+app.use("/api/auth", authRouter);
+
+app.listen(PORT, () => {
+  console.log("listening to port", PORT);
+});
