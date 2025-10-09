@@ -1,18 +1,19 @@
 import Navbar from "./components/navbar";
-import { BackendURL } from "./contexts/context";
+import { BackendProvider } from "./contexts/context";
+import Router from "./routes/routes";
 
 function App() {
   return (
-    <BackendURL.Provider value={import.meta.env.VITE_BACKEND_URL}>
+    <BackendProvider>
       <div className="grid h-screen justify-items-center bg-gradient-to-br from-[var(--primary-blue)] to-[var(--primary-peach)] ">
         <div className="w-full md:w-[80vw] flex flex-col items-center">
-          <div className="w-full">
+          <div className="w-full md:w-[80vw] fixed">
             <Navbar />
           </div>
-          <div>Hello world</div>
+          <Router />
         </div>
       </div>
-    </BackendURL.Provider>
+    </BackendProvider>
   );
 }
 

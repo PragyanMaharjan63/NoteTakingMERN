@@ -43,7 +43,7 @@ export const signup = async (req, res) => {
     });
     return res.json({ success: true, message: "Succesfully signed in" });
   } catch (err) {
-    res.json({ success: false, message: err });
+    res.json({ success: false, message: err.message });
   }
 };
 export const Login = async (req, res) => {
@@ -77,7 +77,7 @@ export const Login = async (req, res) => {
     });
     res.json({ success: true, message: "Succesfully loggedin" });
   } catch (err) {
-    return res.json({ success: false, message: err });
+    return res.json({ success: false, message: err.message });
   }
 };
 export const Logout = (req, res) => {
@@ -89,23 +89,23 @@ export const Logout = (req, res) => {
     });
     return res.json({ success: true, message: "Succesfully logged Out" });
   } catch (err) {
-    return res.json({ succes: false, message: err });
+    return res.json({ succes: false, message: err.message });
   }
 };
 
 export const me = async (req, res) => {
   try {
-    const token = res.cooke.token;
+    const token = req.cookies.token;
     if (!token) {
       return res.json({ success: false, message: "no token found" });
     }
     const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne(verifyToken.id).select("UserName email");
+    const user = await User.findById(verifyToken.id).select("UserName Email");
     if (!user) {
       return res.json({ success: false, message: "User not found" });
     }
-    return res.json({ success: true, message: "succesfully logged in" });
+    return res.json({ success: true, user });
   } catch (err) {
-    return res.json({ success: false, message: err });
+    return res.json({ success: false, message: err.message });
   }
 };
