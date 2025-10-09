@@ -1,37 +1,57 @@
-import axios from "axios";
-
+import { LogOut, User } from "lucide-react";
 import { UseBackend } from "../contexts/context";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Account() {
-  const { backendURL, loggedIn, setLogin } = UseBackend();
-  const [userName, setUserName] = useState("");
+  const { checkAuth, UserName, loggedIn, logout } = UseBackend();
+  const [showdropdown, setDropdown] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
-    const getAccount = async () => {
-      try {
-        let req = await axios.get(`${backendURL}api/auth/me`, {
-          withCredentials: true,
-        });
-        console.log("the result is", req.data.user.UserName);
-        setLogin(req.data.success);
-        setUserName(req.data.user.UserName);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getAccount();
+    checkAuth();
   }, []);
   return (
     <>
       {loggedIn && (
-        <div className="flex gap-x-2 items-center ">
+        <div
+          className="flex gap-x-2 items-center cursor-pointer"
+          onClick={() => setDropdown((prev) => !prev)}
+        >
           <div className="bg-[var(--primary-blue)] p-2 rounded-full size-8 flex justify-center items-center">
-            {userName[0].toUpperCase()}
+            {UserName[0].toUpperCase()}
           </div>
-          <p className="hidden sm:block">{userName}</p>
+          <p className="hidden sm:block select-none">{UserName}</p>
         </div>
       )}
-      {/* <button>Create</button> */}
+      <div
+        className={`flex justify-center transition-all ${
+          showdropdown ? "block" : "hidden"
+        }`}
+      >
+        <ul>
+          <li
+            className="flex gap-3 bg-neutral-200 py-1 px-4 rounded-lg cursor-pointer"
+            onClick={() => {
+              logout();
+              setDropdown(false);
+            }}
+          >
+            Logout
+            <LogOut />
+          </li>
+        </ul>
+      </div>
+      {!loggedIn && (
+        <div
+          className="flex gap-3 items-center"
+          onClick={() => navigate("/signin")}
+        >
+          <div className="bg-[var(--primary-lavendar)] p-2 rounded-full size-8 flex justify-center items-center">
+            <User />
+          </div>
+          <p>Sign in</p>
+        </div>
+      )}
     </>
   );
 }

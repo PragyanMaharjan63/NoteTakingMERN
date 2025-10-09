@@ -54,7 +54,7 @@ export default function Signin() {
           </p>
           {error && <p className="text-sm text-red-500">{error}</p>}
           <input
-            className="p-2 rounded-lg outline-none bg-white"
+            className="md:w-80 p-2 rounded-lg outline-none bg-white"
             type="text"
             placeholder="Enter your UserName"
             {...register("UserName", {
@@ -65,7 +65,7 @@ export default function Signin() {
             <p className="text-sm text-red-500">{errors.UserName.message}</p>
           )}
           <input
-            className="p-2 rounded-lg outline-none bg-white"
+            className="md:w-80 p-2 rounded-lg outline-none bg-white"
             type="text"
             placeholder="Enter your Email"
             {...register("Email", { required: "Please enter Your Email" })}
@@ -75,7 +75,7 @@ export default function Signin() {
           )}
           <div className="relative">
             <input
-              className=" p-2 rounded-lg outline-none bg-white"
+              className="md:w-80  p-2 rounded-lg outline-none bg-white"
               type={showpw ? "text" : "password"}
               placeholder="Enter your password"
               {...register("Password", {
@@ -95,6 +95,15 @@ export default function Signin() {
           {errors.Password && (
             <p className="text-sm text-red-500">{errors.Password.message}</p>
           )}
+          <div className="flex gap-2 text-md text-[var(--heading-mid)]">
+            Already have an account?
+            <p
+              className="text-slate-600 underline cursor-pointer"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </p>
+          </div>
           <input
             type="submit"
             value="Submit"

@@ -3,6 +3,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { UseBackend } from "../contexts/context";
 
 type Formvalues = {
   Email: string;
@@ -10,6 +11,7 @@ type Formvalues = {
 };
 
 export default function Login() {
+  const { checkAuth } = UseBackend();
   const navigate = useNavigate();
   const [showpw, setShowpw] = useState(false);
   const [error, setError] = useState("");
@@ -33,6 +35,7 @@ export default function Login() {
       if (req.data.success) {
         setError("");
         reset();
+        await checkAuth();
         navigate("/");
       }
       setError(req.data.message);
@@ -52,7 +55,7 @@ export default function Login() {
           </p>
           {error && <p className="text-sm text-red-500">{error}</p>}
           <input
-            className="p-2 rounded-lg outline-none bg-white"
+            className="md:w-80 p-2 rounded-lg outline-none bg-white"
             type="text"
             placeholder="Enter your Email"
             {...register("Email", { required: "Please enter Your Email" })}
@@ -62,7 +65,7 @@ export default function Login() {
           )}
           <div className="relative">
             <input
-              className=" p-2 rounded-lg outline-none bg-white"
+              className="md:w-80  p-2 rounded-lg outline-none bg-white"
               type={showpw ? "text" : "password"}
               placeholder="Enter your password"
               {...register("Password", {
@@ -82,6 +85,15 @@ export default function Login() {
           {errors.Password && (
             <p className="text-sm text-red-500">{errors.Password.message}</p>
           )}
+          <div className="flex gap-2 text-md text-[var(--heading-mid)]">
+            Don't have an account?
+            <p
+              className="text-slate-600 underline cursor-pointer"
+              onClick={() => navigate("/signin")}
+            >
+              Signin
+            </p>
+          </div>
           <input
             type="submit"
             value="Submit"
