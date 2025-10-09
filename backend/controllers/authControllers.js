@@ -92,3 +92,20 @@ export const Logout = (req, res) => {
     return res.json({ succes: false, message: err });
   }
 };
+
+export const me = async (req, res) => {
+  try {
+    const token = res.cooke.token;
+    if (!token) {
+      return res.json({ success: false, message: "no token found" });
+    }
+    const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne(verifyToken.id).select("UserName email");
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    return res.json({ success: true, message: "succesfully logged in" });
+  } catch (err) {
+    return res.json({ success: false, message: err });
+  }
+};
