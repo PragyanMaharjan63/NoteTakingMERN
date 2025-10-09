@@ -5,11 +5,12 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 type Formvalues = {
+  UserName: string;
   Email: string;
   Password: string;
 };
 
-export default function Login() {
+export default function Signin() {
   const navigate = useNavigate();
   const [showpw, setShowpw] = useState(false);
   const [error, setError] = useState("");
@@ -22,8 +23,9 @@ export default function Login() {
   const onsubmit: SubmitHandler<Formvalues> = async (data) => {
     try {
       let req = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}api/auth/login`,
+        `${import.meta.env.VITE_BACKEND_URL}api/auth/signin`,
         {
+          UserName: data.UserName,
           Email: data.Email,
           Password: data.Password,
         },
@@ -33,7 +35,7 @@ export default function Login() {
       if (req.data.success) {
         setError("");
         reset();
-        navigate("/");
+        navigate("/login");
       }
       setError(req.data.message);
     } catch (err) {
@@ -48,9 +50,20 @@ export default function Login() {
           className="grid gap-y-4 bg-white/60 p-4 justify-items-center rounded-xl"
         >
           <p className="text-[var(--heading-dark)] font-bold text-2xl ">
-            LOGIN
+            SIGNIN
           </p>
           {error && <p className="text-sm text-red-500">{error}</p>}
+          <input
+            className="p-2 rounded-lg outline-none bg-white"
+            type="text"
+            placeholder="Enter your UserName"
+            {...register("UserName", {
+              required: "Please enter Your UserName",
+            })}
+          />
+          {errors.UserName && (
+            <p className="text-sm text-red-500">{errors.UserName.message}</p>
+          )}
           <input
             className="p-2 rounded-lg outline-none bg-white"
             type="text"

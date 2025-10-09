@@ -1,12 +1,26 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "../components/home";
 import Login from "../components/login";
+import Signin from "../components/signin";
 
 export default function Router() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/signin" element={<Signin />} />
+
+      <Route
+        path="*"
+        element={
+          <div className="h-screen flex flex-col items-center justify-center">
+            <div className="font-bold text-9xl text-[var(--heading-dark)]">
+              404
+            </div>
+            <p className="text-[var(--heading-mid)]">page not found</p>
+          </div>
+        }
+      />
     </Routes>
   );
 }

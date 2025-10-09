@@ -1,7 +1,5 @@
-import React from "react";
-
 const Home = () => {
-  return <div>this is home</div>;
+  return <div className="flex h-screen items-center">this is home</div>;
 };
 
 export default Home;
