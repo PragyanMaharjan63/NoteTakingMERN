@@ -4,6 +4,7 @@ import { configDotenv } from "dotenv";
 import connectDB from "./config/connectdb.js";
 import authRouter from "./routes/authRouter.js";
 import cookieParser from "cookie-parser";
+import noteRouter from "./routes/notesRouter.js";
 configDotenv();
 const PORT = process.env.PORT;
 const app = express();
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 app.use("/api/auth", authRouter);
+app.use("/api/notes", noteRouter);
 
 app.listen(PORT, () => {
   console.log("listening to port", PORT);

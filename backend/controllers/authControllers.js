@@ -109,3 +109,22 @@ export const me = async (req, res) => {
     return res.json({ success: false, message: err.message });
   }
 };
+
+export const authMiddleware = async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.json({ success: false, message: "no token found" });
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decoded.id).select("_id UserName Email");
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
+};
