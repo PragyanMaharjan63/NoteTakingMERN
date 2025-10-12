@@ -20,7 +20,7 @@ export default function Popup({ setShowPopup }: prop) {
   const { backendURL } = UseBackend();
   const { register, handleSubmit, setValue } = useForm<NoteInput>();
   const onSubmit: SubmitHandler<NoteInput> = async (data) => {
-    const req = await axios.post(
+    await axios.post(
       `${backendURL}api/notes/setnotes`,
       {
         Title: data.Title,

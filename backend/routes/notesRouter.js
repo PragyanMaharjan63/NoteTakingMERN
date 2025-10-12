@@ -4,6 +4,7 @@ import {
   deleteNotes,
   getNotes,
   setNotss,
+  updateNote,
 } from "../controllers/notesController.js";
 
 const noteRouter = express.Router();
@@ -11,4 +12,5 @@ const noteRouter = express.Router();
 noteRouter.get("/getnotes", authMiddleware, getNotes);
 noteRouter.post("/setnotes", authMiddleware, setNotss);
 noteRouter.post("/deletenote/:id", authMiddleware, deleteNotes);
+noteRouter.put("/setnotes/:id", authMiddleware, updateNote);
 export default noteRouter;

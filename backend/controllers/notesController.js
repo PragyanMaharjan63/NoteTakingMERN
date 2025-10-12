@@ -37,3 +37,23 @@ export const deleteNotes = async (req, res) => {
     res.send({ success: false, message: err.message });
   }
 };
+
+export const updateNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { Title, Description } = req.body;
+    const userId = req.user;
+
+    const updateNote = await Notes.findByIdAndUpdate(
+      id,
+      { Title, Description },
+      { new: true }
+    );
+    if (!updateNote) {
+      return res.send({ success: false, message: "note not found" });
+    }
+    return res.send({ success: true, message: updateNote });
+  } catch (error) {
+    res.send({ success: false, message: error.message });
+  }
+};
