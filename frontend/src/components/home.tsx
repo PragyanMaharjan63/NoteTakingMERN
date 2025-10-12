@@ -46,14 +46,14 @@ const Home = () => {
 
   useEffect(() => {
     const getNotes = async () => {
-      const req = await axios.get<{ success: boolean; fetchedNotes: Note[] }>(
+      const req = await axios.get<{ success: boolean; decryptedNotes: Note[] }>(
         `${backendURL}api/notes/getnotes`,
         {
           withCredentials: true,
         }
       );
       if (req.data.success) {
-        setNotes(req.data.fetchedNotes);
+        setNotes(req.data.decryptedNotes);
       }
     };
     getNotes();
