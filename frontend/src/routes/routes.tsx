@@ -6,18 +6,23 @@ import Navbar from "../components/navbar";
 import { UseBackend } from "../contexts/context";
 
 export default function Router() {
-  const { loggedIn } = UseBackend();
+  const { loggedIn, authLoading } = UseBackend();
+  if (authLoading) {
+    return <>Loading...</>;
+  }
   return (
     <>
       <div className="w-full md:w-[80vw] fixed z-9">
         <Navbar />
       </div>
+      if()
       <div className="absolute grid place-items-center w-full h-full">
         <Routes>
           <Route
             path="/"
-            element={loggedIn ? <Home /> : <Navigate to="/signin" replace />}
+            element={loggedIn ? <Home /> : <Navigate to="/login" />}
           />
+
           <Route path="/login" element={<Login />} />
           <Route path="/signin" element={<Signin />} />
 

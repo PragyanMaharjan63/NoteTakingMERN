@@ -1,11 +1,19 @@
 import axios from "axios";
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 interface BackendType {
   backendURL: string;
   loggedIn: boolean;
   setLogin: (value: boolean) => void;
   UserName: string;
   setUserName: (value: string) => void;
+  authLoading: boolean;
+  setAuthLoading: (value: boolean) => void;
   checkAuth: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -16,6 +24,8 @@ const backendContext = createContext<BackendType>({
   setLogin: () => {},
   UserName: "",
   setUserName: () => {},
+  authLoading: true,
+  setAuthLoading: () => {},
   checkAuth: async () => {},
   logout: async () => {},
 });
@@ -23,22 +33,30 @@ const backendContext = createContext<BackendType>({
 export function BackendProvider({ children }: { children: ReactNode }) {
   const [loggedIn, setLogin] = useState(false);
   const [UserName, setUserName] = useState("");
+  const [authLoading, setAuthLoading] = useState(true);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   const checkAuth = async () => {
+    setAuthLoading(true);
     try {
       let req = await axios.get(`${backendURL}api/auth/me`, {
         withCredentials: true,
       });
-      console.log("the result is", req.data.user.UserName);
+
       setLogin(req.data.success);
-      setUserName(req.data.user.UserName);
+      setUserName(req.data.user.UserName || "");
     } catch (err) {
       console.error(err);
       setLogin(false);
       setUserName("");
     }
+    setAuthLoading(false);
   };
+
+  useEffect(() => {
+    checkAuth(); // call it on mount
+  }, []);
+
   const logout = async () => {
     try {
       let req = await axios.post(
@@ -62,6 +80,8 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     setUserName,
     checkAuth,
     logout,
+    authLoading,
+    setAuthLoading,
   };
   return (
     <backendContext.Provider value={value}>{children}</backendContext.Provider>
