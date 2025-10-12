@@ -28,6 +28,8 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+
+app.options("*", cors());
 connectDB();
 
 app.get("/", (req, res) => {
