@@ -4,7 +4,7 @@ import Router from "./routes/routes";
 function App() {
   return (
     <BackendProvider>
-      <div className="grid h-screen justify-items-center bg-gradient-to-br from-[var(--primary-blue)] to-[var(--primary-peach)] ">
+      <div className="grid h-screen justify-items-center ">
         <div className="w-full md:w-[80vw] flex flex-col items-center">
           <Router />
         </div>
