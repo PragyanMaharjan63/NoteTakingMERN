@@ -8,7 +8,24 @@ import noteRouter from "./routes/notesRouter.js";
 configDotenv();
 const PORT = process.env.PORT;
 const app = express();
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://note-taking-mern-1w1w.vercel.app", // your deployed frontend
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 connectDB();
