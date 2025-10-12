@@ -6,7 +6,7 @@ import authRouter from "../routes/authRouter.js";
 import cookieParser from "cookie-parser";
 import noteRouter from "../routes/notesRouter.js";
 configDotenv();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 const allowedOrigins = [
