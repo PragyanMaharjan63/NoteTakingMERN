@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { UseBackend } from "../contexts/context";
-import { CirclePlus, X } from "lucide-react";
+import { CirclePlus, Trash } from "lucide-react";
 import Popup from "../assets/popup";
 import DividerLine from "../assets/divider";
 
@@ -17,6 +17,19 @@ const Home = () => {
   const { backendURL } = UseBackend();
   const [showPopup, setShowPopup] = useState(false);
 
+  const deleteNote = async (id: string) => {
+    try {
+      const req = await axios.post(
+        `${backendURL}api/notes/deletenote/${id}`,
+        null,
+        { withCredentials: true }
+      );
+      setNotes((prev) => prev.filter((note) => note._id !== id));
+      console.log(req.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     if (showPopup) {
       document.body.style.overflow = "hidden";
@@ -45,16 +58,24 @@ const Home = () => {
   }, [showPopup]);
   return (
     <div>
-      <div className="flex flex-wrap grow h-screen w-full gap-x-5 justify-center items-center  z-5">
+      <div className="flex flex-wrap grow h-screen w-full md:w-[80vw] gap-x-5 justify-center items-center  z-5 translate-y-18">
         {notes.map((note) => (
           <div
             key={note._id}
-            className="flex flex-col justify-start items-start gap-2 bg-white p-5 rounded-xl shadow-md w-60 h-70 mt-3"
+            className="flex relative flex-col justify-start items-start gap-2 bg-white/70 p-5 rounded-xl shadow-md w-60 h-70 mt-3"
           >
             <div className="text-lg font-semibold">{note.Title}</div>
             <DividerLine />
             <div className="overflow-hidden text-neutral-600">
               {note.Description}
+            </div>
+            <div
+              className="absolute bottom-5 left-4 rounded-full flex justify-center items-center bg-[#FF6B6B] p-2"
+              onClick={() => {
+                deleteNote(note._id);
+              }}
+            >
+              <Trash />
             </div>
           </div>
         ))}
@@ -73,7 +94,7 @@ const Home = () => {
         </div>
       </div>
       {showPopup && (
-        <div className="fixed inset-0 grid place-items-center bg-black/40 z-50 overflow-y-auto">
+        <div className="fixed inset-0 w-full h-screen grid place-items-center bg-black/40 z-50 overflow-y-auto">
           <div className="relative max-h-[90vh] overflow-y-auto">
             <Popup setShowPopup={setShowPopup} />
           </div>

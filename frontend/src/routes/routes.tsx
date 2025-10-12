@@ -10,7 +10,7 @@ export default function Router() {
       <div className="w-full md:w-[80vw] fixed z-9">
         <Navbar />
       </div>
-      <div className="translate-y-20">
+      <div className="absolute grid place-items-center w-full h-full">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

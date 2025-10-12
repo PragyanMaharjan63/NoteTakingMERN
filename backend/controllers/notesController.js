@@ -23,6 +23,17 @@ export const setNotss = async (req, res) => {
 
     res.send({ success: true, message: `${Note.Title} added` });
   } catch (err) {
-    res.json({ success: false, message: err.message });
+    res.send({ success: false, message: err.message });
+  }
+};
+
+export const deleteNotes = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Notes.deleteOne({ _id: id });
+
+    res.send({ success: true, message: "deleted" });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
   }
 };
