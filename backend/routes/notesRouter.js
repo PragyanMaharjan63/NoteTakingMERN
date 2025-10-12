@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { authMiddleware } from "../controllers/authControllers.js";
 import {
   deleteNotes,
@@ -8,7 +9,7 @@ import {
 } from "../controllers/notesController.js";
 
 const noteRouter = express.Router();
-
+noteRouter.use(cors(crossOptions));
 noteRouter.get("/getnotes", authMiddleware, getNotes);
 noteRouter.post("/setnotes", authMiddleware, setNotss);
 noteRouter.post("/deletenote/:id", authMiddleware, deleteNotes);
