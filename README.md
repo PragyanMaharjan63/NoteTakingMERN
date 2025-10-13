@@ -1,8 +1,8 @@
-# ✍️ Ntoe Taking App
+# ✍️ Note Taking App
 
 ## 📖 Project Overview
 
-**Ntoe Taking** is a simple, secure, and personal note-taking application. Built with the **MERN stack**, this project focuses on **data privacy** by enforcing strong **user authentication** and implementing **advanced encryption** for all note content before it touches the database.
+**Note Taking** is a simple, secure, and personal note-taking application. Built with the **MERN stack**, this project focuses on **data privacy** by enforcing strong **user authentication** and implementing **advanced encryption** for all note content before it touches the database.
 
 ---
 
@@ -29,7 +29,7 @@
 
 ## 🚀 Getting Started
 
-Follow these steps to set up and run the Ntoe Taking application locally.
+Follow these steps to set up and run the Note Taking application locally.
 
 ### Prerequisites
 
