@@ -34,7 +34,8 @@ export default function Login() {
       if (req.data.success) {
         setError("");
         reset();
-        login(req.data.token, req.data.user.UserName);
+        const UserName = req.data.user?.UserName || data.Email.split("@")[0];
+        login(req.data.token, UserName);
         navigate("/");
       }
       setError(req.data.message);
