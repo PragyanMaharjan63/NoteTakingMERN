@@ -11,7 +11,7 @@ export default function Router() {
       <div className="w-full md:w-[80vw] fixed z-9">
         <Navbar />
       </div>
-      if()
+
       <div className="absolute grid place-items-center w-full h-full">
         <Routes>
           <Route path="/" element={<HomeRouteWrapper />} />
