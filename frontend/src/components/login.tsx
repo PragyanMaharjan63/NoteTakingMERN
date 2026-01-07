@@ -30,7 +30,7 @@ export default function Login() {
           Password: data.Password,
         }
       );
-      console.log(req.data);
+      // console.log(req.data);
       if (req.data.success) {
         setError("");
         reset();
