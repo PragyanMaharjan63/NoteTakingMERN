@@ -21,10 +21,11 @@ const Home = () => {
   const [selectedItem, setSelectedItem] = useState<Note | null>(null);
   const deleteNote = async (id: string) => {
     try {
+      const token = localStorage.getItem("token");
       const req = await axios.post(
         `${backendURL}api/notes/deletenote/${id}`,
         null,
-        { withCredentials: true }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setNotes((prev) => prev.filter((note) => note._id !== id));
       console.log(req.data);
@@ -46,11 +47,10 @@ const Home = () => {
 
   useEffect(() => {
     const getNotes = async () => {
+      const token = localStorage.getItem("token");
       const req = await axios.get<{ success: boolean; decryptedNotes: Note[] }>(
         `${backendURL}api/notes/getnotes`,
-        {
-          withCredentials: true,
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (req.data.success) {
         setNotes(req.data.decryptedNotes);

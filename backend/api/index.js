@@ -17,7 +17,7 @@ const allowedOrigins = [
 ];
 
 const corsOptions = {
-  origin: "https://note-taking-mern-1w1w.vercel.app",
+  origin: allowedOrigins,
   credentials: true,
 };
 app.use(cors(corsOptions));
