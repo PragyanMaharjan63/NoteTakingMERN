@@ -5,6 +5,8 @@ import connectDB from "../config/connectdb.js";
 import authRouter from "../routes/authRouter.js";
 import cookieParser from "cookie-parser";
 import noteRouter from "../routes/notesRouter.js";
+
+//switch to using localstorage instead of cookies
 configDotenv();
 const PORT = process.env.PORT || 3000;
 const app = express();

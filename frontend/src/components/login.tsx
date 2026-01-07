@@ -11,7 +11,7 @@ type Formvalues = {
 };
 
 export default function Login() {
-  const { checkAuth } = UseBackend();
+  const { login } = UseBackend();
   const navigate = useNavigate();
   const [showpw, setShowpw] = useState(false);
   const [error, setError] = useState("");
@@ -28,14 +28,13 @@ export default function Login() {
         {
           Email: data.Email,
           Password: data.Password,
-        },
-        { withCredentials: true }
+        }
       );
       console.log(req.data);
       if (req.data.success) {
         setError("");
         reset();
-        await checkAuth();
+        login(req.data.token, req.data.user.UserName);
         navigate("/");
       }
       setError(req.data.message);

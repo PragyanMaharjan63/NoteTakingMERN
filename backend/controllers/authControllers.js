@@ -75,7 +75,7 @@ export const Login = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.json({ success: true, message: "Succesfully loggedin" });
+    res.json({ success: true, message: "Succesfully loggedin", token });
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }
@@ -87,7 +87,11 @@ export const Logout = (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
-    return res.json({ success: true, message: "Succesfully logged Out" });
+    return res.json({
+      success: true,
+      message: "Succesfully logged Out",
+      token,
+    });
   } catch (err) {
     return res.json({ succes: false, message: err.message });
   }
@@ -95,7 +99,8 @@ export const Logout = (req, res) => {
 
 export const me = async (req, res) => {
   try {
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.split(" ")[1];
     if (!token) {
       return res.json({ success: false, message: "no token found" });
     }
@@ -112,7 +117,8 @@ export const me = async (req, res) => {
 
 export const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.split(" ")[1];
     if (!token) {
       return res.json({ success: false, message: "no token found" });
     }

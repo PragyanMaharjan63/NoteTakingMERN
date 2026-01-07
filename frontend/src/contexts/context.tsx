@@ -6,6 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+
 interface BackendType {
   backendURL: string;
   loggedIn: boolean;
@@ -13,7 +14,8 @@ interface BackendType {
   UserName: string;
   setUserName: (value: string) => void;
   checkAuth: () => Promise<void>;
-  logout: () => Promise<void>;
+  logout: () => void;
+  login: (token: string, userName: string) => void;
 }
 
 const backendContext = createContext<BackendType>({
@@ -23,7 +25,8 @@ const backendContext = createContext<BackendType>({
   UserName: "",
   setUserName: () => {},
   checkAuth: async () => {},
-  logout: async () => {},
+  logout: () => {},
+  login: () => {},
 });
 
 export function BackendProvider({ children }: { children: ReactNode }) {
@@ -32,42 +35,59 @@ export function BackendProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
+  const login = (token: string, userName: string) => {
+    localStorage.setItem("token", token);
+    setLogin(true);
+    setUserName(userName);
+  };
+
   const checkAuth = async () => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setLogin(false);
+        setUserName("");
+        setIsLoading(false);
+        return;
+      }
+
       let req = await axios.get(`${backendURL}api/auth/me`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      setLogin(req.data.success);
-      setUserName(req.data.user.UserName || "");
+      if (req.data.success) {
+        setLogin(true);
+        setUserName(req.data.user.UserName || "");
+      } else {
+        // Token is invalid
+        localStorage.removeItem("token");
+        setLogin(false);
+        setUserName("");
+      }
     } catch (err) {
       console.error(err);
+      localStorage.removeItem("token");
       setLogin(false);
       setUserName("");
     } finally {
-      setIsLoading(false); // Done checking
+      setIsLoading(false);
     }
   };
 
-  const logout = async () => {
-    try {
-      let req = await axios.post(
-        `${backendURL}api/auth/logout`,
-        {},
-        { withCredentials: true }
-      );
-      console.log(req);
-      setLogin(false);
-      setUserName("");
-    } catch (err) {
-      console.error(err);
-    }
+  const logout = () => {
+    localStorage.removeItem("token");
+    setLogin(false);
+    setUserName("");
   };
 
-  // ✅ Check auth when provider mounts
+  // Check auth when provider mounts
   useEffect(() => {
     checkAuth();
   }, []);
+
   const value: BackendType = {
     backendURL,
     loggedIn,
@@ -76,7 +96,9 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     setUserName,
     checkAuth,
     logout,
+    login,
   };
+
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">

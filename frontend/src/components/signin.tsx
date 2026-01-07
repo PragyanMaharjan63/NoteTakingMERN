@@ -3,6 +3,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { UseBackend } from "../contexts/context";
 
 type Formvalues = {
   UserName: string;
@@ -11,6 +12,7 @@ type Formvalues = {
 };
 
 export default function Signin() {
+  const { login } = UseBackend();
   const navigate = useNavigate();
   const [showpw, setShowpw] = useState(false);
   const [error, setError] = useState("");
@@ -28,14 +30,14 @@ export default function Signin() {
           UserName: data.UserName,
           Email: data.Email,
           Password: data.Password,
-        },
-        { withCredentials: true }
+        }
       );
       console.log(req.data);
       if (req.data.success) {
         setError("");
         reset();
-        navigate("/login");
+        login(req.data.token, req.data.user.UserName);
+        navigate("/");
       }
       setError(req.data.message);
     } catch (err) {
