@@ -75,7 +75,15 @@ export const Login = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.json({ success: true, message: "Succesfully loggedin", token });
+    res.json({
+      success: true,
+      message: "Succesfully loggedin",
+      token,
+      user: {
+        UserName: user.UserName,
+        Email: user.Email,
+      },
+    });
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }
