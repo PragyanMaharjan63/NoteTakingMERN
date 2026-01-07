@@ -1,5 +1,11 @@
 import axios from "axios";
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 interface BackendType {
   backendURL: string;
   loggedIn: boolean;
@@ -23,6 +29,7 @@ const backendContext = createContext<BackendType>({
 export function BackendProvider({ children }: { children: ReactNode }) {
   const [loggedIn, setLogin] = useState(false);
   const [UserName, setUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   const checkAuth = async () => {
@@ -37,8 +44,11 @@ export function BackendProvider({ children }: { children: ReactNode }) {
       console.error(err);
       setLogin(false);
       setUserName("");
+    } finally {
+      setIsLoading(false); // Done checking
     }
   };
+
   const logout = async () => {
     try {
       let req = await axios.post(
@@ -54,6 +64,10 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // ✅ Check auth when provider mounts
+  useEffect(() => {
+    checkAuth();
+  }, []);
   const value: BackendType = {
     backendURL,
     loggedIn,
@@ -63,6 +77,14 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     checkAuth,
     logout,
   };
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <backendContext.Provider value={value}>{children}</backendContext.Provider>
   );
