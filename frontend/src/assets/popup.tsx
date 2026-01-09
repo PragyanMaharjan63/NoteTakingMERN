@@ -25,7 +25,8 @@ export default function Popup({ setShowPopup }: prop) {
       {
         Title: data.Title,
         Description: data.Description,
-      }
+      },
+        { headers: { Authorization: `Bearer ${token}` } } 
     );
     setShowPopup(false);
   };
