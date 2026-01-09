@@ -25,8 +25,7 @@ export default function Popup({ setShowPopup }: prop) {
       {
         Title: data.Title,
         Description: data.Description,
-      },
-      { withCredentials: true }
+      }
     );
     setShowPopup(false);
   };
