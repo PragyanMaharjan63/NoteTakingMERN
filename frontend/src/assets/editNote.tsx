@@ -31,13 +31,14 @@ export default function EditNote({ setEditNote, note }: prop) {
   });
 
   const onSubmit: SubmitHandler<NoteInput> = async (data) => {
-    await axios.put(
+       const token = localStorage.getItem("token");
+ await axios.put(
       `${backendURL}api/notes/setnotes/${note._id}`,
       {
         Title: data.Title,
         Description: data.Description,
       },
-      { withCredentials: true }
+              { headers: { Authorization: `Bearer ${token}` } } 
     );
     setEditNote(false);
   };
