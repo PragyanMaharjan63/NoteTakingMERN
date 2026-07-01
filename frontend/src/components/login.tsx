@@ -11,7 +11,7 @@ type Formvalues = {
 };
 
 export default function Login() {
-  const { login } = UseBackend();
+  const { backendURL, login } = UseBackend();
   const navigate = useNavigate();
   const [showpw, setShowpw] = useState(false);
   const [error, setError] = useState("");
@@ -24,7 +24,7 @@ export default function Login() {
   const onsubmit: SubmitHandler<Formvalues> = async (data) => {
     try {
       let req = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}api/auth/login`,
+        `${backendURL}api/auth/login`,
         {
           Email: data.Email,
           Password: data.Password,

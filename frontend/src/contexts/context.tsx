@@ -18,8 +18,12 @@ interface BackendType {
   login: (token: string, userName: string) => void;
 }
 
+const DEFAULT_BACKEND_URL = "http://localhost:3001/";
+const backendURL =
+  import.meta.env.VITE_BACKEND_URL?.trim() || DEFAULT_BACKEND_URL;
+
 const backendContext = createContext<BackendType>({
-  backendURL: import.meta.env.VITE_BACKEND_URL,
+  backendURL,
   loggedIn: false,
   setLogin: () => {},
   UserName: "",
@@ -33,7 +37,6 @@ export function BackendProvider({ children }: { children: ReactNode }) {
   const [loggedIn, setLogin] = useState(false);
   const [UserName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   const login = (token: string, userName: string) => {
     localStorage.setItem("token", token);
